@@ -5,14 +5,14 @@ import Course from '../models/course.js';
 const {multipleMongooseToObject, mongooseToObject} = require('../../util/mongoose.js');
 
 
-class SiteController{
+class LearningController{
     //[GET] /news
 
         home(req,res,next){ 
            
             Course.find({})
                 .then(courses => {
-                    res.render('home',{
+                    res.render('learning',{
                         courses:multipleMongooseToObject(courses),
                     });
                 })
@@ -25,4 +25,4 @@ class SiteController{
         }
     }
 
-module.exports = new SiteController;
+module.exports = new LearningController;

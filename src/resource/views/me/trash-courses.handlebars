@@ -1,0 +1,84 @@
+<div class="mt-4">
+  <h1>STORE COURSES DELETED</h1>
+  <a href="/me/stored/courses">Trở về danh sách khóa học</a>
+  <table class="table mt-4">
+    <thead>
+      <tr>
+        <th scope="col">STT</th>
+        <th scope="col">Tên khóa học</th>
+        <th scope="col">Trình độ</th>
+        <th scope="col">Thời gian tạo</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each courses}}
+      <tr>
+        <th scope="row">{{@index}}</th>
+        <td>{{this.name}}</td>
+        <td>{{this.level}}</td>
+        <td>{{this.createdAt}}</td>
+        <td>
+          <a href="" class="text-primary me-4 restore-btn">Khôi phục</a>
+          <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#model-delete-course" data-id="{{this._id}}">Xóa</a>
+        </td>
+      </tr>
+      {{else}}
+        <tr>
+          <td colspan="5" class="text-center">
+            Thùng rác của bạn đang rỗng !!
+          </td>
+        </tr>
+
+
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+{{!-- Confirm Delete Course Modal --}}
+<div class="modal fade" id="model-delete-course" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Bạn có chắc muốn xóa khóa học này ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <button type="button" id="delete-accept" class="btn btn-danger">Xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- Hidden form --}}
+<form method="POST" name="deleteCourseForm"></form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const deleteCourseModal = document.getElementById('model-delete-course');
+    const deleteAcceptButton = document.getElementById('delete-accept');
+    const deleteForm = document.forms['deleteCourseForm'];
+    let idToDelete = null;
+
+  
+    deleteCourseModal.addEventListener('show.bs.modal', event => {
+      const button = event.relatedTarget;
+      idToDelete = button.getAttribute('data-id');
+    });
+
+    deleteAcceptButton.onclick = function () {
+      if (idToDelete) {
+        deleteForm.action = '/courses/delete/' + idToDelete;
+        deleteForm.submit();
+      } else {
+        console.log('Không có ID để xóa.');
+      }
+    };
+  });
+</script>

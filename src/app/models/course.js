@@ -1,12 +1,36 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose from 'mongoose';
+const { Schema, models } = mongoose;
+import slug from 'slug';
 
-const Course = new Schema({
+const CourseSchema = new Schema({
     name: {type : String, maxLength: 255},
-    description: {type : String, maxLength: 255},
-    image: {type: String, maxLength: 255},
-    createdAt :{type: Date, default: Date.now}, // luu thoi gian duoc tao
-    updatedAt :{type: Date, default: Date.now}, // luu thoi gian cap nhat
+    description: {type : String},
+    videoId: {type: String, maxLength: 255},
+    image: {type: String},
+    level: {type: String, maxLength: 255},
+    slug : {type: String},
+  },{
+    timestamps : true,
   });
+  
+  CourseSchema.pre('save',function (next) {
+    const nameSlug = slug(this.name)
+      this.slug = nameSlug;
+    next()
 
-module.exports = mongoose.model('Course', Course)
+  })
+  
+  //Soft deleted
+  const mongooseDelete = require('mongoose-delete');
+  CourseSchema.plugin(mongooseDelete, { 
+    deletedAt: true,
+    overrideMethods: true ,
+    
+  }); //{} de hien thi danh sach cac doc chua bi xoa
+
+
+
+
+  const Course = models.Course || mongoose.model("Course", CourseSchema);
+
+export default Course;

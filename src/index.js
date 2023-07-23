@@ -7,6 +7,7 @@ const express = require('express');
 const morgan = require('morgan');
 const db = require('./config/db')
 
+
 //Connect db
 db.connect();
 
@@ -33,6 +34,7 @@ app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'resource/views'));
 
 route(app)
+
 
 app.listen(port, () => {
   console.log(`App listening on port http://localhost:${port}`)
